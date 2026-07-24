@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { X, Copy, Check, Download, Smartphone, Apple, Terminal, Code2, Layers, ExternalLink } from 'lucide-react';
+import { X, Copy, Check, Download, Smartphone, Apple, Terminal, Code2, Layers, ExternalLink, ChevronDown } from 'lucide-react';
 
 interface NativeCodeExportModalProps {
   isOpen: boolean;
@@ -244,12 +244,18 @@ export async function connectNativeWireGuard(conf: string, endpoint: string) {
         <div className="p-5 flex-1 overflow-y-auto space-y-6">
           {activeTab === 'android' && (
             <div className="space-y-5">
-              <div className="p-3.5 bg-emerald-500/10 border border-emerald-500/20 rounded-xl text-xs text-emerald-300 flex items-start gap-2.5">
-                <Smartphone className="w-4 h-4 text-emerald-400 shrink-0 mt-0.5" />
-                <div>
-                  <strong>Нативный VpnService Android:</strong> Приложение работает в качестве полноценной системной службы. Автоматически создает TUN-интерфейс (`tun0`), работает в фоновом режиме без отключений экономией батареи и поддерживает выгрузку отдельных приложений через Split Tunneling.
+              <details className="group bg-emerald-500/10 border border-emerald-500/20 rounded-xl overflow-hidden transition-all">
+                <summary className="p-3.5 cursor-pointer text-xs font-bold text-emerald-300 flex items-center justify-between hover:bg-emerald-500/20 select-none list-none">
+                  <span className="flex items-center gap-2">
+                    <Smartphone className="w-4 h-4 text-emerald-400 shrink-0" />
+                    <span>Описание и принципы работы Android VpnService</span>
+                  </span>
+                  <ChevronDown className="w-4 h-4 transition-transform group-open:rotate-180 text-emerald-400" />
+                </summary>
+                <div className="p-3.5 pt-0 text-xs text-emerald-300/90 border-t border-emerald-500/20 mt-1">
+                  <strong>Нативный VpnService Android:</strong> Приложение работает в качестве полноценной системной службы. Автоматически создает TUN-интерфейс (<code>tun0</code>), работает в фоновом режиме без отключений экономией батареи и поддерживает выгрузку отдельных приложений через Split Tunneling.
                 </div>
-              </div>
+              </details>
 
               {/* Kotlin VpnService */}
               <div className="space-y-2">
@@ -302,12 +308,18 @@ export async function connectNativeWireGuard(conf: string, endpoint: string) {
 
           {activeTab === 'ios' && (
             <div className="space-y-5">
-              <div className="p-3.5 bg-sky-500/10 border border-sky-500/20 rounded-xl text-xs text-sky-300 flex items-start gap-2.5">
-                <Apple className="w-4 h-4 text-sky-400 shrink-0 mt-0.5" />
-                <div>
-                  <strong>Нативный iOS NetworkExtension Framework:</strong> Запускает системный `PacketTunnelProvider`. Осуществляет прямое шифрование пакетов через модуль `WireGuardKit` (C-Go bindings), отображает иконку VPN в статус-баре iOS и полностью контролирует трафик устройства.
+              <details className="group bg-sky-500/10 border border-sky-500/20 rounded-xl overflow-hidden transition-all">
+                <summary className="p-3.5 cursor-pointer text-xs font-bold text-sky-300 flex items-center justify-between hover:bg-sky-500/20 select-none list-none">
+                  <span className="flex items-center gap-2">
+                    <Apple className="w-4 h-4 text-sky-400 shrink-0" />
+                    <span>Описание iOS NetworkExtension Framework</span>
+                  </span>
+                  <ChevronDown className="w-4 h-4 transition-transform group-open:rotate-180 text-sky-400" />
+                </summary>
+                <div className="p-3.5 pt-0 text-xs text-sky-300/90 border-t border-sky-500/20 mt-1">
+                  <strong>Нативный iOS NetworkExtension Framework:</strong> Запускает системный <code>PacketTunnelProvider</code>. Осуществляет прямое шифрование пакетов через модуль <code>WireGuardKit</code> (C-Go bindings), отображает иконку VPN в статус-баре iOS и полностью контролирует трафик устройства.
                 </div>
-              </div>
+              </details>
 
               <div className="space-y-2">
                 <div className="flex items-center justify-between">
@@ -340,12 +352,18 @@ export async function connectNativeWireGuard(conf: string, endpoint: string) {
 
           {activeTab === 'bridge' && (
             <div className="space-y-5">
-              <div className="p-3.5 bg-indigo-500/10 border border-indigo-500/20 rounded-xl text-xs text-indigo-300 flex items-start gap-2.5">
-                <Layers className="w-4 h-4 text-indigo-400 shrink-0 mt-0.5" />
-                <div>
+              <details className="group bg-indigo-500/10 border border-indigo-500/20 rounded-xl overflow-hidden transition-all">
+                <summary className="p-3.5 cursor-pointer text-xs font-bold text-indigo-300 flex items-center justify-between hover:bg-indigo-500/20 select-none list-none">
+                  <span className="flex items-center gap-2">
+                    <Layers className="w-4 h-4 text-indigo-400 shrink-0" />
+                    <span>Описание Кроссплатформенного Плагина IPC</span>
+                  </span>
+                  <ChevronDown className="w-4 h-4 transition-transform group-open:rotate-180 text-indigo-400" />
+                </summary>
+                <div className="p-3.5 pt-0 text-xs text-indigo-300/90 border-t border-indigo-500/20 mt-1">
                   <strong>Кроссплатформенный плагин IPC (Capacitor / React Native):</strong> Мост для связывания веб-интерфейса React с нативным системным бинарником WireGuard на смартфонах.
                 </div>
-              </div>
+              </details>
 
               <div className="space-y-2">
                 <div className="flex items-center justify-between">

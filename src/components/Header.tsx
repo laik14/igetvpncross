@@ -5,7 +5,7 @@ interface HeaderProps {
   platform: 'ios' | 'android' | 'desktop';
   onOpenSettings: () => void;
   isNativeConnected: boolean;
-  theme: 'liquid-dark' | 'liquid-light' | 'dark';
+  theme: 'liquid-dark' | 'liquid-light';
   onToggleTheme: () => void;
 }
 
@@ -43,31 +43,11 @@ export const Header: React.FC<HeaderProps> = ({
           </div>
 
           <div className="min-w-0">
-            <div className="flex items-center gap-1.5 min-w-0">
-              <h1 className={`text-sm sm:text-lg font-black tracking-tight truncate flex items-center gap-1.5 ${
-                isLight ? 'text-slate-900' : 'text-white'
-              }`}>
-                WireGuard <span className="text-sky-500 font-extrabold hidden xs:inline">Native</span>
-              </h1>
-              
-              {/* Компактный бейдж WG */}
-              <span className={`text-[10px] font-extrabold px-2 py-0.5 rounded-md border tracking-wider transition-colors shrink-0 ${
-                isLight
-                  ? 'bg-amber-100 text-amber-800 border-amber-300'
-                  : 'bg-amber-500/20 text-amber-300 border-amber-500/30'
-              }`}>
-                PRO
-              </span>
-            </div>
-
-            <p className={`text-[10px] sm:text-[11px] font-medium items-center gap-1 hidden sm:flex truncate ${
-              isLight ? 'text-slate-500' : 'text-slate-400'
+            <h1 className={`text-base sm:text-xl font-black tracking-tight truncate flex items-center gap-1 ${
+              isLight ? 'text-slate-900' : 'text-white'
             }`}>
-              <Smartphone className="w-3 h-3 text-slate-400 shrink-0" />
-              <span>
-                {platform === 'ios' ? 'iOS NetworkExtension Tunnel' : platform === 'android' ? 'Android VpnService Engine' : 'Cross-Platform Client'}
-              </span>
-            </p>
+              iGetVPN <span className="text-sky-500 font-extrabold">Pro</span>
+            </h1>
           </div>
         </div>
 

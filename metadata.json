@@ -1,6 +1,6 @@
 {
-  "name": "WireGuard Native Mobile - Cross-Platform VPN",
-  "description": "Native cross-platform WireGuard VPN app manager and source builder for iOS (NetworkExtension/WireGuardKit) and Android (VpnService/WireGuard Android SDK) with live native tunnel control.",
+  "name": "iGetVPN Pro",
+  "description": "Native cross-platform WireGuard VPN app manager for iOS and Android.",
   "requestFramePermissions": [],
   "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
 }

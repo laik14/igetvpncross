@@ -104,7 +104,7 @@ export const NodeSelectorModal: React.FC<NodeSelectorModalProps> = ({
         </div>
 
         {/* Nodes List */}
-        <div className="p-4 overflow-y-auto space-y-2 flex-1 custom-scrollbar">
+        <div className="p-3 sm:p-4 overflow-y-auto space-y-2 flex-1 custom-scrollbar">
           {filteredNodes.length > 0 ? (
             filteredNodes.map(node => {
               const isSelected = selectedNode.id === node.id;
@@ -115,7 +115,7 @@ export const NodeSelectorModal: React.FC<NodeSelectorModalProps> = ({
                     onSelectNode(node);
                     onClose();
                   }}
-                  className={`group relative p-3.5 rounded-2xl border transition-all cursor-pointer flex items-center justify-between ${
+                  className={`group relative p-3 sm:p-3.5 rounded-2xl border transition-all cursor-pointer flex items-center justify-between gap-3 ${
                     isSelected
                       ? 'bg-sky-500/10 border-sky-500/60 shadow-md'
                       : isLight
@@ -123,47 +123,47 @@ export const NodeSelectorModal: React.FC<NodeSelectorModalProps> = ({
                       : 'bg-slate-950/60 border-slate-800/80 hover:bg-slate-800/60 hover:border-slate-700'
                   }`}
                 >
-                  <div className="flex items-center gap-3">
-                    <span className="text-3xl leading-none">{node.flag}</span>
-                    <div>
-                      <div className="flex items-center gap-2">
-                        <h4 className={`text-sm font-bold transition-colors ${
+                  <div className="flex items-center gap-2.5 sm:gap-3 min-w-0 flex-1">
+                    <span className="text-2xl sm:text-3xl leading-none shrink-0">{node.flag}</span>
+                    <div className="min-w-0 flex-1">
+                      <div className="flex flex-wrap items-center gap-1.5 sm:gap-2">
+                        <h4 className={`text-xs sm:text-sm font-bold truncate ${
                           isLight ? 'text-slate-900 group-hover:text-sky-600' : 'text-white group-hover:text-sky-300'
                         }`}>
                           {node.name}
                         </h4>
                         {node.obfuscated && (
-                          <span className="text-[10px] font-semibold px-2 py-0.5 rounded bg-amber-500/15 text-amber-600 dark:text-amber-400 border border-amber-500/30">
+                          <span className="shrink-0 text-[9px] sm:text-[10px] font-semibold px-1.5 sm:px-2 py-0.5 rounded bg-amber-500/15 text-amber-600 dark:text-amber-400 border border-amber-500/30">
                             Obfuscated
                           </span>
                         )}
                       </div>
 
-                      <div className={`flex items-center gap-2 text-xs mt-1 font-mono ${isLight ? 'text-slate-500' : 'text-slate-400'}`}>
-                        <span>Endpoint: {node.endpoint}</span>
-                        <span>•</span>
-                        <span>IP: {node.ip}</span>
+                      <div className={`flex flex-wrap items-center gap-x-2 gap-y-0.5 text-[11px] sm:text-xs mt-1 font-mono ${isLight ? 'text-slate-500' : 'text-slate-400'}`}>
+                        <span className="truncate max-w-[180px] sm:max-w-none">Endpoint: {node.endpoint}</span>
+                        <span className="hidden sm:inline">•</span>
+                        <span className="truncate">IP: {node.ip}</span>
                       </div>
                     </div>
                   </div>
 
-                  <div className="flex items-center gap-4">
+                  <div className="flex items-center gap-2.5 sm:gap-4 shrink-0">
                     {/* Load & Ping */}
-                    <div className="flex flex-col items-end">
-                      <div className="flex items-center gap-1.5 text-xs font-mono font-bold">
-                        <span className={`w-2 h-2 rounded-full ${node.pingMs < 50 ? 'bg-emerald-500' : 'bg-amber-500'}`}></span>
-                        <span className="text-emerald-500">{node.pingMs} ms</span>
+                    <div className="flex flex-col items-end shrink-0">
+                      <div className="flex items-center gap-1 text-[11px] sm:text-xs font-mono font-bold">
+                        <span className={`w-2 h-2 rounded-full shrink-0 ${node.pingMs < 50 ? 'bg-emerald-500' : 'bg-amber-500'}`}></span>
+                        <span className="text-emerald-500 whitespace-nowrap">{node.pingMs} ms</span>
                       </div>
-                      <div className={`text-[10px] mt-0.5 ${isLight ? 'text-slate-400' : 'text-slate-500'}`}>
+                      <div className={`text-[10px] mt-0.5 whitespace-nowrap ${isLight ? 'text-slate-400' : 'text-slate-500'}`}>
                         Загрузка: {node.loadPercent}%
                       </div>
                     </div>
 
                     {/* Radio / Selection Indicator */}
-                    <div className={`w-6 h-6 rounded-full flex items-center justify-center border transition-all ${
+                    <div className={`w-5 h-5 sm:w-6 sm:h-6 rounded-full flex items-center justify-center border shrink-0 transition-all ${
                       isSelected ? 'bg-sky-500 border-sky-400 text-white' : isLight ? 'border-slate-300' : 'border-slate-700'
                     }`}>
-                      {isSelected && <Check className="w-4 h-4 stroke-[3]" />}
+                      {isSelected && <Check className="w-3.5 h-3.5 sm:w-4 sm:h-4 stroke-[3]" />}
                     </div>
                   </div>
                 </div>

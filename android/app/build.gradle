@@ -3,6 +3,12 @@ plugins {
     id 'org.jetbrains.kotlin.android'
 }
 
+def keystorePath = System.getenv("ANDROID_KEYSTORE_PATH")
+def hasReleaseSigning = keystorePath != null &&
+        System.getenv("ANDROID_KEYSTORE_PASSWORD") != null &&
+        System.getenv("ANDROID_KEY_ALIAS") != null &&
+        System.getenv("ANDROID_KEY_PASSWORD") != null
+
 android {
     namespace 'com.wireguard.nativemobile'
     compileSdk 34
@@ -17,13 +23,28 @@ android {
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
+    signingConfigs {
+        release {
+            if (hasReleaseSigning) {
+                storeFile file(keystorePath)
+                storePassword System.getenv("ANDROID_KEYSTORE_PASSWORD")
+                keyAlias System.getenv("ANDROID_KEY_ALIAS")
+                keyPassword System.getenv("ANDROID_KEY_PASSWORD")
+            }
+        }
+    }
+
     buildTypes {
         release {
             minifyEnabled false
+            if (hasReleaseSigning) {
+                signingConfig signingConfigs.release
+            }
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
     compileOptions {
+        coreLibraryDesugaringEnabled true
         sourceCompatibility JavaVersion.VERSION_17
         targetCompatibility JavaVersion.VERSION_17
     }
@@ -33,13 +54,23 @@ android {
 }
 
 dependencies {
+    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:2.0.4'
+
     implementation 'androidx.core:core-ktx:1.12.0'
     implementation 'androidx.appcompat:appcompat:1.6.1'
     implementation 'com.google.android.material:material:1.10.0'
     
     // WireGuard Native Android Tunnel Library
-    implementation 'com.wireguard.android:tunnel:1.0.20230707'
+    implementation 'com.wireguard.android:tunnel:1.0.20260102'
     
     // Coroutines & Lifecycle
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.3'
 }
+
+tasks.register('copyWebAssets', Copy) {
+    from("$rootDir/../dist")
+    into("$projectDir/src/main/assets/www")
+    exclude("server.cjs", "server.cjs.map")
+}
+
+preBuild.dependsOn copyWebAssets

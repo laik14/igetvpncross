@@ -10,7 +10,11 @@ let deferredPrompt: PWAInstallEvent | null = null;
  * Инициализация Service Worker и перехват предложения установки PWA
  */
 export function initPWASericeWorker(onStatusChange?: (installed: boolean, backgroundActive: boolean) => void) {
-  if ('serviceWorker' in navigator) {
+  // В Safari и WebView внутри iframe ITP блокирует cookies у Service Worker, вызывая циклы редиректа на /authenticate.
+  // Поэтому активируем Service Worker только когда приложение открыто как самостоятельная вкладка / PWA.
+  const isEmbeddedInIframe = window.self !== window.top;
+
+  if ('serviceWorker' in navigator && !isEmbeddedInIframe) {
     window.addEventListener('load', async () => {
       try {
         const registration = await navigator.serviceWorker.register('/sw.js');
@@ -25,6 +29,11 @@ export function initPWASericeWorker(onStatusChange?: (installed: boolean, backgr
         }
       }
     });
+  } else if (isEmbeddedInIframe) {
+    console.log('[PWA] Режим iFrame обнаружен: Service Worker отключен для предотвращения конфликтов авторизации Safari.');
+    if (onStatusChange) {
+      onStatusChange(false, false);
+    }
   }
 
   window.addEventListener('beforeinstallprompt', (e) => {

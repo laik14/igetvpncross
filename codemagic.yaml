@@ -2,68 +2,77 @@ workflows:
   android-release:
     name: Android Release Build (APK & AAB)
     max_build_duration: 60
-    instance_type: mac_mini_m1
+    instance_type: linux_x2
     environment:
       groups:
         - android_credentials
       vars:
         PACKAGE_NAME: "com.wireguard.nativemobile"
-      node: 18.x
+      node: 20
       java: 17
     scripts:
-      - name: Install dependencies
+      - name: Install web dependencies
         script: |
           npm ci || npm install
-      - name: Build Web Assets for Capacitor/Cordova/React
+      - name: Build web assets
         script: |
           npm run build
-      - name: Build Android Release APK
+      - name: Build Android release
         script: |
-          cd android && ./gradlew assembleRelease
+          if [ -n "$ANDROID_KEYSTORE_BASE64" ]; then
+            export ANDROID_KEYSTORE_PATH="$CM_BUILD_DIR/android/release.keystore"
+            echo "$ANDROID_KEYSTORE_BASE64" | base64 --decode > "$ANDROID_KEYSTORE_PATH"
+          fi
+          cd android
+          ./gradlew assembleRelease bundleRelease
     artifacts:
       - android/app/build/outputs/apk/release/*.apk
       - android/app/build/outputs/bundle/release/*.aab
     publishing:
       email:
         recipients:
-          - user@example.com
+          - "$CM_COMMIT_AUTHOR_EMAIL"
         notify_on_build_start: false
         notify_on_build_failure: true
 
   ios-testflight:
     name: iOS TestFlight Build (IPA)
     max_build_duration: 60
-    instance_type: mac_mini_m1
+    instance_type: mac_mini_m2
     environment:
       ios_signing:
         distribution_type: app_store
         bundle_identifier: com.wireguard.nativemobile
       vars:
-        XCODE_WORKSPACE: "ios/App/App.xcworkspace"
+        XCODE_PROJECT: "ios/App/WireGuardNative.xcodeproj"
         XCODE_SCHEME: "App"
-        APP_STORE_CONNECT_ISSUER_ID: Encrypted
-        APP_STORE_CONNECT_KEY_IDENTIFIER: Encrypted
-        APP_STORE_CONNECT_PRIVATE_KEY: Encrypted
+        DEVELOPMENT_TEAM: Encrypted
+      node: 20
       xcode: latest
-      cocoapods: default
     scripts:
-      - name: Install Node dependencies & Build Web
+      - name: Install web dependencies
         script: |
           npm ci || npm install
+      - name: Build web assets
+        script: |
           npm run build
-      - name: Install CocoaPods
+      - name: Generate Xcode project
         script: |
-          cd ios/App && pod install
-      - name: Set build number
+          brew list xcodegen >/dev/null 2>&1 || brew install xcodegen
+          cd ios/App
+          xcodegen generate
+      - name: Set up iOS code signing
         script: |
-          cd ios/App && agvtool new-version -all $(($BUILD_NUMBER + 1))
-      - name: Build IPA for App Store / TestFlight
+          xcode-project use-profiles --project "$XCODE_PROJECT"
+      - name: Build IPA
         script: |
           xcode-project build-ipa \
-            --workspace "$XCODE_WORKSPACE" \
-            --scheme "$XCODE_SCHEME"
+            --project "$XCODE_PROJECT" \
+            --scheme "$XCODE_SCHEME" \
+            --archive-xcargs "DEVELOPMENT_TEAM=$DEVELOPMENT_TEAM CURRENT_PROJECT_VERSION=$BUILD_NUMBER"
     artifacts:
       - build/ios/ipa/*.ipa
+      - $HOME/Library/Developer/Xcode/DerivedData/**/Build/**/*.dSYM
     publishing:
       app_store_connect:
         auth: integration

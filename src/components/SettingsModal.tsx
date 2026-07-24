@@ -1,5 +1,5 @@
 import React from 'react';
-import { X, Shield, Lock, Zap, Sliders, Code2, Rocket, Sun, Moon, Sparkles } from 'lucide-react';
+import { X, Shield, Lock, Zap, Sliders, Code2, Rocket, Sun, Moon, Sparkles, ChevronDown } from 'lucide-react';
 import { AppSettings } from '../types';
 
 interface SettingsModalProps {
@@ -20,24 +20,24 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
   const isLight = settings.theme === 'liquid-light';
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md animate-fadeIn">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-black/80 backdrop-blur-md animate-fadeIn">
       <div className={`w-full max-w-xl rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[85vh] border transition-colors ${
         isLight ? 'bg-white/95 border-slate-200 text-slate-800' : 'bg-slate-900/95 border-slate-800 text-slate-200'
       }`}>
         
         {/* Header */}
-        <div className={`flex items-center justify-between p-4 border-b ${
+        <div className={`flex items-center justify-between p-3.5 sm:p-4 border-b gap-3 ${
           isLight ? 'bg-slate-100/80 border-slate-200' : 'bg-slate-950/70 border-slate-800'
         }`}>
-          <div className="flex items-center gap-2">
-            <Sliders className="w-5 h-5 text-sky-500" />
-            <h2 className={`text-base font-bold ${isLight ? 'text-slate-900' : 'text-white'}`}>
-              Настройки WireGuard & Нативного Клиента
+          <div className="flex items-center gap-2.5 min-w-0 flex-1">
+            <Sliders className="w-5 h-5 text-sky-500 shrink-0" />
+            <h2 className={`text-sm sm:text-base font-bold truncate ${isLight ? 'text-slate-900' : 'text-white'}`}>
+              Настройки iGetVPN Pro
             </h2>
           </div>
           <button
             onClick={onClose}
-            className={`p-1.5 rounded-lg transition-colors cursor-pointer ${
+            className={`p-1.5 rounded-lg transition-colors cursor-pointer shrink-0 ${
               isLight ? 'bg-slate-200 hover:bg-slate-300 text-slate-700' : 'bg-slate-800 hover:bg-slate-700 text-slate-400 hover:text-white'
             }`}
           >
@@ -46,51 +46,61 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
         </div>
 
         {/* Body */}
-        <div className="p-5 overflow-y-auto flex-1 space-y-5 text-xs custom-scrollbar">
+        <div className="p-4 sm:p-5 overflow-y-auto flex-1 space-y-4 sm:space-y-5 text-xs custom-scrollbar">
           
-          {/* Быстрые действия: Исходный код & Выкатка в Прод */}
-          <div className={`p-3.5 rounded-xl border space-y-2.5 ${
-            isLight ? 'bg-sky-50 border-sky-200' : 'bg-slate-950 border-slate-800'
+          {/* Быстрые действия: Исходный код & Выкатка в Прод (Под кат) */}
+          <details className={`group rounded-xl border overflow-hidden transition-all ${
+            isLight ? 'bg-sky-50/50 border-sky-200' : 'bg-slate-950 border-slate-800'
           }`}>
-            <label className={`block font-bold text-xs uppercase tracking-wider ${
-              isLight ? 'text-sky-900' : 'text-sky-400'
+            <summary className={`p-3 sm:p-3.5 cursor-pointer font-bold text-xs uppercase tracking-wider flex items-center justify-between select-none list-none gap-2 ${
+              isLight ? 'text-sky-900 hover:bg-sky-100/50' : 'text-sky-400 hover:bg-slate-900'
             }`}>
-              Разработка и Релиз приложений
-            </label>
-            <p className="text-[11px] text-slate-500">
-              Исходные файлы Swift/Kotlin и пошаговая инструкция публикации в App Store / Google Play:
-            </p>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-              <button
-                onClick={() => {
-                  onClose();
-                  onOpenNativeCode();
-                }}
-                className="flex items-center justify-center gap-2 px-3 py-2 rounded-xl bg-sky-500 hover:bg-sky-600 text-white font-bold text-xs transition-colors cursor-pointer shadow-sm"
-              >
-                <Code2 className="w-4 h-4" />
-                <span>Исходный код (Swift/Kotlin)</span>
-              </button>
+              <span className="flex items-center gap-2 min-w-0 flex-1">
+                <Code2 className="w-4 h-4 text-sky-400 shrink-0" />
+                <span className="truncate">Разработка и Релиз (Swift/Kotlin)</span>
+              </span>
+              <span className="flex items-center gap-1.5 text-[11px] font-normal text-slate-400 shrink-0">
+                <span className="group-open:hidden">Раскрыть</span>
+                <span className="hidden group-open:inline">Скрыть</span>
+                <ChevronDown className="w-4 h-4 transition-transform group-open:rotate-180 text-sky-400 shrink-0" />
+              </span>
+            </summary>
+            <div className="p-3 sm:p-3.5 pt-0 border-t border-slate-800/40 space-y-2.5 mt-2">
+              <p className="text-[11px] text-slate-400">
+                Исходные файлы Swift/Kotlin и пошаговая инструкция публикации в App Store / Google Play:
+              </p>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                <button
+                  onClick={() => {
+                    onClose();
+                    onOpenNativeCode();
+                  }}
+                  className="flex items-center justify-center gap-2 px-3 py-2 rounded-xl bg-sky-500 hover:bg-sky-600 text-white font-bold text-xs transition-colors cursor-pointer shadow-sm"
+                >
+                  <Code2 className="w-4 h-4 shrink-0" />
+                  <span>Исходный код (Swift/Kotlin)</span>
+                </button>
 
-              <button
-                onClick={() => {
-                  onClose();
-                  onOpenGuides();
-                }}
-                className="flex items-center justify-center gap-2 px-3 py-2 rounded-xl bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold text-xs transition-colors cursor-pointer shadow-sm"
-              >
-                <Rocket className="w-4 h-4" />
-                <span>Инструкция выкатки в Прод</span>
-              </button>
+                <button
+                  onClick={() => {
+                    onClose();
+                    onOpenGuides();
+                  }}
+                  className="flex items-center justify-center gap-2 px-3 py-2 rounded-xl bg-amber-500 hover:bg-amber-600 text-slate-950 font-bold text-xs transition-colors cursor-pointer shadow-sm"
+                >
+                  <Rocket className="w-4 h-4 shrink-0" />
+                  <span>Инструкция выкатки в Прод</span>
+                </button>
+              </div>
             </div>
-          </div>
+          </details>
 
           {/* Переключение тем Liquid Glass */}
           <div className="space-y-2">
             <label className={`block text-xs font-semibold ${isLight ? 'text-slate-900' : 'text-slate-200'}`}>
               Тема оформления интерфейса (Liquid Glass)
             </label>
-            <div className="grid grid-cols-3 gap-2">
+            <div className="grid grid-cols-2 gap-2">
               <button
                 onClick={() => onUpdateSettings({ ...settings, theme: 'liquid-dark' })}
                 className={`p-2.5 rounded-xl border font-semibold text-xs flex flex-col items-center gap-1.5 transition-all cursor-pointer ${
@@ -99,7 +109,7 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                     : isLight ? 'bg-slate-100 border-slate-200 text-slate-700' : 'bg-slate-950 border-slate-800 text-slate-400'
                 }`}
               >
-                <Moon className="w-4 h-4 text-sky-400" />
+                <Moon className="w-4 h-4 text-sky-400 shrink-0" />
                 <span>Liquid Dark</span>
               </button>
 
@@ -111,20 +121,8 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
                     : isLight ? 'bg-slate-100 border-slate-200 text-slate-700' : 'bg-slate-950 border-slate-800 text-slate-400'
                 }`}
               >
-                <Sun className="w-4 h-4 text-amber-500" />
+                <Sun className="w-4 h-4 text-amber-500 shrink-0" />
                 <span>Liquid Light</span>
-              </button>
-
-              <button
-                onClick={() => onUpdateSettings({ ...settings, theme: 'dark' })}
-                className={`p-2.5 rounded-xl border font-semibold text-xs flex flex-col items-center gap-1.5 transition-all cursor-pointer ${
-                  settings.theme === 'dark'
-                    ? 'bg-sky-500/20 border-sky-500 text-sky-400 shadow-md'
-                    : isLight ? 'bg-slate-100 border-slate-200 text-slate-700' : 'bg-slate-950 border-slate-800 text-slate-400'
-                }`}
-              >
-                <Sparkles className="w-4 h-4 text-indigo-400" />
-                <span>Cyber Dark</span>
               </button>
             </div>
           </div>
@@ -165,11 +163,11 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
 
           {/* MTU Slider */}
           <div className="space-y-1.5">
-            <div className="flex items-center justify-between">
-              <label className={`text-xs font-semibold ${isLight ? 'text-slate-900' : 'text-slate-200'}`}>
+            <div className="flex items-center justify-between gap-2">
+              <label className={`text-xs font-semibold truncate ${isLight ? 'text-slate-900' : 'text-slate-200'}`}>
                 WireGuard MTU (Размер пакета)
               </label>
-              <span className="font-mono text-sky-500 font-bold">{settings.mtu} bytes</span>
+              <span className="font-mono text-sky-500 font-bold shrink-0">{settings.mtu} bytes</span>
             </div>
             <input
               type="range"
@@ -183,15 +181,15 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
           </div>
 
           {/* Kill Switch Toggle */}
-          <div className={`flex items-center justify-between p-3.5 rounded-xl border ${
+          <div className={`flex items-center justify-between p-3 sm:p-3.5 rounded-xl border gap-3 ${
             isLight ? 'bg-slate-100 border-slate-200' : 'bg-slate-950 border-slate-800'
           }`}>
-            <div>
-              <div className={`font-semibold flex items-center gap-1.5 ${isLight ? 'text-slate-900' : 'text-white'}`}>
-                <Lock className="w-4 h-4 text-rose-500" />
-                <span>Strict Kill Switch</span>
+            <div className="min-w-0 flex-1">
+              <div className={`font-semibold flex items-center gap-1.5 text-xs sm:text-sm ${isLight ? 'text-slate-900' : 'text-white'}`}>
+                <Lock className="w-4 h-4 text-rose-500 shrink-0" />
+                <span className="truncate">Strict Kill Switch</span>
               </div>
-              <p className="text-[11px] text-slate-500 mt-0.5">
+              <p className="text-[11px] text-slate-500 mt-0.5 leading-snug">
                 Блокирует незашифрованный трафик при разрыве туннеля.
               </p>
             </div>
@@ -207,15 +205,15 @@ export const SettingsModal: React.FC<SettingsModalProps> = ({
           </div>
 
           {/* Obfuscation Toggle */}
-          <div className={`flex items-center justify-between p-3.5 rounded-xl border ${
+          <div className={`flex items-center justify-between p-3 sm:p-3.5 rounded-xl border gap-3 ${
             isLight ? 'bg-slate-100 border-slate-200' : 'bg-slate-950 border-slate-800'
           }`}>
-            <div>
-              <div className={`font-semibold flex items-center gap-1.5 ${isLight ? 'text-slate-900' : 'text-white'}`}>
-                <Shield className="w-4 h-4 text-amber-500" />
-                <span>Протокол обфускации AmneziaWG</span>
+            <div className="min-w-0 flex-1">
+              <div className={`font-semibold flex items-center gap-1.5 text-xs sm:text-sm ${isLight ? 'text-slate-900' : 'text-white'}`}>
+                <Shield className="w-4 h-4 text-amber-500 shrink-0" />
+                <span className="truncate">Протокол обфускации AmneziaWG</span>
               </div>
-              <p className="text-[11px] text-slate-500 mt-0.5">
+              <p className="text-[11px] text-slate-500 mt-0.5 leading-snug">
                 Маскирует WireGuard заголовки для обхода блокировок ТСПУ / DPI.
               </p>
             </div>

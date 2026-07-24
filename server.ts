@@ -71,7 +71,7 @@ const SERVER_NODES = [
 app.get('/sw.js', (req, res) => {
   res.setHeader('Content-Type', 'application/javascript');
   res.send(`
-    const CACHE_NAME = 'wireguard-pwa-v1';
+    const CACHE_NAME = 'wireguard-pwa-v2';
     const ASSETS = ['/', '/index.html', '/manifest.webmanifest'];
 
     self.addEventListener('install', (event) => {
@@ -85,7 +85,7 @@ app.get('/sw.js', (req, res) => {
       event.waitUntil(self.clients.claim());
     });
 
-    // Фоновый фоновый воркер для поддержания соединения и пинга
+    // Фоновый воркер для поддержания соединения и пинга
     self.addEventListener('message', (event) => {
       if (event.data && event.data.type === 'START_BACKGROUND_KEEP_ALIVE') {
         console.log('[SW] Фоновый keep-alive активирован для статуса WireGuard туннеля...');
@@ -94,8 +94,11 @@ app.get('/sw.js', (req, res) => {
 
     self.addEventListener('fetch', (event) => {
       if (event.request.method !== 'GET') return;
+      // Пропускаем навигационные запросы напрямую в сеть для избежания конфликтов авторизации в Safari/Chrome iframes
+      if (event.request.mode === 'navigate') return;
+
       event.respondWith(
-        fetch(event.request).catch(() => caches.match(event.request))
+        fetch(event.request, { credentials: 'same-origin' }).catch(() => caches.match(event.request))
       );
     });
   `);

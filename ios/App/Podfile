@@ -1,0 +1,7 @@
+platform :ios, '15.0'
+
+target 'App' do
+end
+
+target 'PacketTunnel' do
+end

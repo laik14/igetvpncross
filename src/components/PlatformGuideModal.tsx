@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { X, Smartphone, Shield, Download, CheckCircle, ExternalLink, Cpu, Info, Zap, AlertTriangle, Apple, Code2, Layers, Rocket } from 'lucide-react';
+import { X, Smartphone, Shield, Download, CheckCircle, ExternalLink, Cpu, Info, Zap, AlertTriangle, Apple, Code2, Layers, Rocket, ChevronDown } from 'lucide-react';
 
 interface PlatformGuideModalProps {
   onClose: () => void;
@@ -18,9 +18,9 @@ export const PlatformGuideModal: React.FC<PlatformGuideModalProps> = ({ onClose,
           <div className="flex items-center gap-2.5">
             <Smartphone className="w-5 h-5 text-sky-400" />
             <div>
-              <h2 className="text-base font-bold text-white">Инструкция Сборки и Выкатки Нативного Приложения</h2>
+              <h2 className="text-base font-bold text-white">Инструкции Сборки и Выкатки Приложения</h2>
               <p className="text-xs text-slate-400">
-                Компиляция APK/AAB (Android Studio), iOS (Xcode / TestFlight) и релиз в магазины приложений
+                Все инструкции спрятаны под кат. Нажмите на любой раздел, чтобы развернуть детали.
               </p>
             </div>
           </div>
@@ -76,27 +76,37 @@ export const PlatformGuideModal: React.FC<PlatformGuideModalProps> = ({ onClose,
         </div>
 
         {/* Содержимое вкладки */}
-        <div className="p-6 overflow-y-auto flex-1 space-y-6 text-slate-300 text-xs leading-relaxed custom-scrollbar">
+        <div className="p-6 overflow-y-auto flex-1 space-y-4 text-slate-300 text-xs leading-relaxed custom-scrollbar">
           
           {activeTab === 'production' && (
-            <div className="space-y-5">
+            <div className="space-y-4">
               <div className="p-4 rounded-xl bg-indigo-500/10 border border-indigo-500/20 text-indigo-200 space-y-1">
                 <h4 className="font-bold text-sm text-white flex items-center gap-2">
                   <Rocket className="w-4 h-4 text-amber-400" />
                   Руководство по релизу WireGuard VPN в Продакшен
                 </h4>
                 <p>
-                  Для официального размещения приложения VPN в Google Play и Apple App Store необходимо выполнить следующие ключевые шаги квалификации и сборки.
+                  Кжмите на интересующий блок ниже, чтобы раскрыть подробные пошаговые инструкции под катом.
                 </p>
               </div>
 
-              {/* Блок 1: Android Google Play */}
-              <div className="p-4 rounded-xl bg-slate-950 border border-slate-800 space-y-3">
-                <h5 className="font-bold text-emerald-400 text-sm flex items-center gap-2 border-b border-slate-900 pb-2">
-                  <span>🤖</span> 1. Релиз в Google Play Console (Android)
-                </h5>
+              {/* Блок 1: Android Google Play (Под кат) */}
+              <details className="group rounded-xl bg-slate-950 border border-slate-800 overflow-hidden transition-all">
+                <summary className="flex items-center justify-between p-4 cursor-pointer font-bold text-emerald-400 text-sm hover:bg-slate-900/80 transition-colors select-none list-none">
+                  <span className="flex items-center gap-2">
+                    <span>🤖</span> 1. Релиз в Google Play Console (Android)
+                  </span>
+                  <span className="text-[11px] font-normal text-slate-400 bg-slate-900 border border-slate-800 px-2.5 py-1 rounded-lg flex items-center gap-1.5 group-open:hidden">
+                    <span>Раскрыть под катом</span>
+                    <ChevronDown className="w-3.5 h-3.5 text-emerald-400" />
+                  </span>
+                  <span className="text-[11px] font-normal text-slate-400 bg-slate-900 border border-slate-800 px-2.5 py-1 rounded-lg hidden group-open:inline-flex items-center gap-1.5">
+                    <span>Скрыть</span>
+                    <ChevronDown className="w-3.5 h-3.5 rotate-180 text-emerald-400" />
+                  </span>
+                </summary>
 
-                <div className="space-y-2">
+                <div className="p-4 pt-2 border-t border-slate-900 space-y-2 text-slate-300">
                   <div className="flex gap-2">
                     <span className="font-bold text-white shrink-0">Шаг 1:</span>
                     <span>Скомпилируйте <strong>Android App Bundle (.aab)</strong> в Android Studio via <code>Build &gt; Generate Signed Bundle / APK</code> с ключом подписи Release Keystore.</span>
@@ -110,15 +120,25 @@ export const PlatformGuideModal: React.FC<PlatformGuideModalProps> = ({ onClose,
                     <span>Опубликуйте ссылку на Privacy Policy (Политику конфиденциальности) с гарантийной формулировкой <strong>No-Logs Policy</strong> (без сохранения логов сайтов и IP).</span>
                   </div>
                 </div>
-              </div>
+              </details>
 
-              {/* Блок 2: iOS App Store */}
-              <div className="p-4 rounded-xl bg-slate-950 border border-slate-800 space-y-3">
-                <h5 className="font-bold text-sky-400 text-sm flex items-center gap-2 border-b border-slate-900 pb-2">
-                  <span>🍎</span> 2. Релиз в App Store Connect & TestFlight (iOS)
-                </h5>
+              {/* Блок 2: iOS App Store (Под кат) */}
+              <details className="group rounded-xl bg-slate-950 border border-slate-800 overflow-hidden transition-all">
+                <summary className="flex items-center justify-between p-4 cursor-pointer font-bold text-sky-400 text-sm hover:bg-slate-900/80 transition-colors select-none list-none">
+                  <span className="flex items-center gap-2">
+                    <span>🍎</span> 2. Релиз в App Store Connect & TestFlight (iOS)
+                  </span>
+                  <span className="text-[11px] font-normal text-slate-400 bg-slate-900 border border-slate-800 px-2.5 py-1 rounded-lg flex items-center gap-1.5 group-open:hidden">
+                    <span>Раскрыть под катом</span>
+                    <ChevronDown className="w-3.5 h-3.5 text-sky-400" />
+                  </span>
+                  <span className="text-[11px] font-normal text-slate-400 bg-slate-900 border border-slate-800 px-2.5 py-1 rounded-lg hidden group-open:inline-flex items-center gap-1.5">
+                    <span>Скрыть</span>
+                    <ChevronDown className="w-3.5 h-3.5 rotate-180 text-sky-400" />
+                  </span>
+                </summary>
 
-                <div className="space-y-2">
+                <div className="p-4 pt-2 border-t border-slate-900 space-y-2 text-slate-300">
                   <div className="flex gap-2">
                     <span className="font-bold text-white shrink-0">Шаг 1:</span>
                     <span>Запросите у Apple разрешение <strong>Network Extension Entitlement</strong> в консоли Developer Account (Apple выдает доступ к <code>com.apple.developer.networking.vpn.api</code> за 1-2 дня).</span>
@@ -132,17 +152,30 @@ export const PlatformGuideModal: React.FC<PlatformGuideModalProps> = ({ onClose,
                     <span>Отправьте сборку во внутреннее или публичное тестирование <strong>TestFlight</strong>. Пользователи смогут ставить приложение по ссылке в 1 клик.</span>
                   </div>
                 </div>
-              </div>
+              </details>
 
-              {/* Блок 3: Серверная инфраструктура */}
-              <div className="p-4 rounded-xl bg-slate-950 border border-slate-800 space-y-3">
-                <h5 className="font-bold text-amber-400 text-sm flex items-center gap-2 border-b border-slate-900 pb-2">
-                  <span>🖥️</span> 3. Серверная инфраструктура нодов
-                </h5>
-                <p className="text-slate-400">
-                  Ваши клиенты обращаются к REST API <code>/api/nodes</code> за динамическими конфигурациями keys/peers. В продакшене серверные ноды WireGuard работают на Ubuntu с утилитой <code>wg-quick</code> и включенным IP Forwarding (<code>sysctl -w net.ipv4.ip_forward=1</code>).
-                </p>
-              </div>
+              {/* Блок 3: Серверная инфраструктура (Под кат) */}
+              <details className="group rounded-xl bg-slate-950 border border-slate-800 overflow-hidden transition-all">
+                <summary className="flex items-center justify-between p-4 cursor-pointer font-bold text-amber-400 text-sm hover:bg-slate-900/80 transition-colors select-none list-none">
+                  <span className="flex items-center gap-2">
+                    <span>🖥️</span> 3. Серверная инфраструктура нодов
+                  </span>
+                  <span className="text-[11px] font-normal text-slate-400 bg-slate-900 border border-slate-800 px-2.5 py-1 rounded-lg flex items-center gap-1.5 group-open:hidden">
+                    <span>Раскрыть под катом</span>
+                    <ChevronDown className="w-3.5 h-3.5 text-amber-400" />
+                  </span>
+                  <span className="text-[11px] font-normal text-slate-400 bg-slate-900 border border-slate-800 px-2.5 py-1 rounded-lg hidden group-open:inline-flex items-center gap-1.5">
+                    <span>Скрыть</span>
+                    <ChevronDown className="w-3.5 h-3.5 rotate-180 text-amber-400" />
+                  </span>
+                </summary>
+
+                <div className="p-4 pt-2 border-t border-slate-900 space-y-2 text-slate-400">
+                  <p>
+                    Ваши клиенты обращаются к REST API <code>/api/nodes</code> за динамическими конфигурациями keys/peers. В продакшене серверные ноды WireGuard работают на Ubuntu с утилитой <code>wg-quick</code> и включенным IP Forwarding (<code>sysctl -w net.ipv4.ip_forward=1</code>).
+                  </p>
+                </div>
+              </details>
             </div>
           )}
 
@@ -157,60 +190,85 @@ export const PlatformGuideModal: React.FC<PlatformGuideModalProps> = ({ onClose,
                 </p>
               </div>
 
-              <div className="space-y-3">
-                <div className="p-3.5 rounded-xl bg-slate-950 border border-slate-800 flex gap-3">
-                  <span className="flex items-center justify-center w-6 h-6 rounded-full bg-emerald-500 text-slate-950 font-bold text-xs shrink-0">1</span>
-                  <div>
-                    <h5 className="font-bold text-white mb-0.5">Скопируйте исходный код WireGuardVpnService.kt</h5>
-                    <p className="text-slate-400">
-                      Откройте раздел <strong className="text-emerald-400">Исходный код Native</strong> в шапке приложения и скопируйте класс <code>WireGuardVpnService.kt</code> в проект Android Studio.
-                    </p>
-                  </div>
-                </div>
+              {/* Инструкция Android под кат */}
+              <details className="group rounded-xl bg-slate-950 border border-slate-800 overflow-hidden transition-all">
+                <summary className="flex items-center justify-between p-4 cursor-pointer font-bold text-white text-sm hover:bg-slate-900/80 transition-colors select-none list-none">
+                  <span className="flex items-center gap-2">
+                    <Smartphone className="w-4 h-4 text-emerald-400" />
+                    <span>Пошаговая инструкция интеграции в Android Studio</span>
+                  </span>
+                  <span className="text-[11px] font-normal text-slate-400 bg-slate-900 border border-slate-800 px-2.5 py-1 rounded-lg flex items-center gap-1.5 group-open:hidden">
+                    <span>Раскрыть под катом</span>
+                    <ChevronDown className="w-3.5 h-3.5 text-emerald-400" />
+                  </span>
+                  <span className="text-[11px] font-normal text-slate-400 bg-slate-900 border border-slate-800 px-2.5 py-1 rounded-lg hidden group-open:inline-flex items-center gap-1.5">
+                    <span>Скрыть</span>
+                    <ChevronDown className="w-3.5 h-3.5 rotate-180 text-emerald-400" />
+                  </span>
+                </summary>
 
-                <div className="p-3.5 rounded-xl bg-slate-950 border border-slate-800 flex gap-3">
-                  <span className="flex items-center justify-center w-6 h-6 rounded-full bg-emerald-500 text-slate-950 font-bold text-xs shrink-0">2</span>
-                  <div>
-                    <h5 className="font-bold text-white mb-0.5">Добавьте разрешение BIND_VPN_SERVICE</h5>
-                    <p className="text-slate-400">
-                      В файле <code>AndroidManifest.xml</code> зарегистрируйте службу с разрешением <code>android.permission.BIND_VPN_SERVICE</code> и типом <code>connectedDevice</code>.
-                    </p>
+                <div className="p-4 pt-2 border-t border-slate-900 space-y-3">
+                  <div className="p-3 rounded-lg bg-slate-900/60 border border-slate-800/80 flex gap-3">
+                    <span className="flex items-center justify-center w-6 h-6 rounded-full bg-emerald-500 text-slate-950 font-bold text-xs shrink-0">1</span>
+                    <div>
+                      <h5 className="font-bold text-white mb-0.5">Скопируйте исходный код WireGuardVpnService.kt</h5>
+                      <p className="text-slate-400">
+                        Откройте раздел <strong className="text-emerald-400">Исходный код Native</strong> в шапке приложения и скопируйте класс <code>WireGuardVpnService.kt</code> в проект Android Studio.
+                      </p>
+                    </div>
                   </div>
-                </div>
 
-                <div className="p-3.5 rounded-xl bg-slate-950 border border-slate-800 flex gap-3">
-                  <span className="flex items-center justify-center w-6 h-6 rounded-full bg-emerald-500 text-slate-950 font-bold text-xs shrink-0">3</span>
-                  <div>
-                    <h5 className="font-bold text-white mb-0.5">Сборка APK и выгрузка на смартфон</h5>
-                    <p className="text-slate-400">
-                      Запустите <code>Build &gt; Build APK(s)</code> в Android Studio или соберите проект с помощью Capacitor (<code>npx cap build android</code>). Приложение сразу установится как системный клиент VPN.
-                    </p>
+                  <div className="p-3 rounded-lg bg-slate-900/60 border border-slate-800/80 flex gap-3">
+                    <span className="flex items-center justify-center w-6 h-6 rounded-full bg-emerald-500 text-slate-950 font-bold text-xs shrink-0">2</span>
+                    <div>
+                      <h5 className="font-bold text-white mb-0.5">Добавьте разрешение BIND_VPN_SERVICE</h5>
+                      <p className="text-slate-400">
+                        В файле <code>AndroidManifest.xml</code> зарегистрируйте службу с разрешением <code>android.permission.BIND_VPN_SERVICE</code> и типом <code>connectedDevice</code>.
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="p-3 rounded-lg bg-slate-900/60 border border-slate-800/80 flex gap-3">
+                    <span className="flex items-center justify-center w-6 h-6 rounded-full bg-emerald-500 text-slate-950 font-bold text-xs shrink-0">3</span>
+                    <div>
+                      <h5 className="font-bold text-white mb-0.5">Сборка APK и выгрузка на смартфон</h5>
+                      <p className="text-slate-400">
+                        Запустите <code>Build &gt; Build APK(s)</code> в Android Studio или соберите проект с помощью Capacitor (<code>npx cap build android</code>). Приложение сразу установится как системный клиент VPN.
+                      </p>
+                    </div>
                   </div>
                 </div>
-              </div>
+              </details>
             </div>
           )}
 
           {activeTab === 'ios' && (
             <div className="space-y-4">
-              {/* Блок: Как обойтись без Xcode */}
-              <div className="p-4 rounded-xl bg-amber-500/10 border border-amber-500/30 text-amber-200 space-y-2">
-                <h4 className="font-bold text-sm text-white flex items-center gap-2">
-                  <span>💡</span> Как обойтись БЕЗ Mac и Xcode на iOS?
-                </h4>
-                <p className="text-slate-300 text-xs">
-                  Если у вас нет компьютера Mac с установленным Xcode, есть 4 простых способов запустить WireGuard VPN на iPhone:
-                </p>
-                
-                <div className="space-y-2 pt-1 text-xs">
-                  <div className="p-2.5 rounded-lg bg-slate-950/80 border border-slate-800">
+              {/* Блок 1: Как обойтись без Xcode (Под кат) */}
+              <details className="group rounded-xl bg-amber-500/10 border border-amber-500/30 text-amber-200 overflow-hidden transition-all">
+                <summary className="flex items-center justify-between p-4 cursor-pointer font-bold text-sm text-white hover:bg-amber-500/20 transition-colors select-none list-none">
+                  <span className="flex items-center gap-2">
+                    <span>💡</span> Как обойтись БЕЗ Mac и Xcode на iOS? (4 способа под катом)
+                  </span>
+                  <span className="text-[11px] font-normal text-amber-300 bg-amber-950/80 border border-amber-500/40 px-2.5 py-1 rounded-lg flex items-center gap-1.5 group-open:hidden">
+                    <span>Раскрыть варианты</span>
+                    <ChevronDown className="w-3.5 h-3.5 text-amber-400" />
+                  </span>
+                  <span className="text-[11px] font-normal text-slate-400 bg-slate-900 border border-slate-800 px-2.5 py-1 rounded-lg hidden group-open:inline-flex items-center gap-1.5">
+                    <span>Скрыть</span>
+                    <ChevronDown className="w-3.5 h-3.5 rotate-180 text-amber-400" />
+                  </span>
+                </summary>
+
+                <div className="p-4 pt-2 border-t border-amber-500/20 space-y-2 text-xs">
+                  <div className="p-2.5 rounded-lg bg-slate-950/90 border border-slate-800">
                     <strong className="text-amber-400">1. Установка через 1-Click Apple Profile (.mobileconfig)</strong>
                     <p className="text-slate-400 mt-0.5">
                       В этом приложении нажмите кнопку <strong>"Создать .conf / QR-код"</strong> и выберите скачивание <code>iOS MobileConfig</code>. Откройте <strong>Настройки iPhone &gt; Профиль загружен &gt; Установить</strong>. iOS настроит нативный WireGuard туннель прямо в системных настройках iOS без сторонних программ!
                     </p>
                   </div>
 
-                  <div className="p-2.5 rounded-lg bg-slate-950/80 border border-slate-800">
+                  <div className="p-2.5 rounded-lg bg-slate-950/90 border border-slate-800">
                     <strong className="text-amber-400">2. Официальный клиент WireGuard из App Store + QR-код</strong>
                     <p className="text-slate-400 mt-0.5">
                       Установите бесплатное приложение <strong>WireGuard</strong> из официального App Store. Нажмите <strong>"+" &gt; Сканировать QR-код</strong> и наведите камеру iPhone на QR-код из этого приложения.
@@ -232,55 +290,64 @@ export const PlatformGuideModal: React.FC<PlatformGuideModalProps> = ({ onClose,
                     </ol>
                   </div>
 
-                  <div className="p-2.5 rounded-lg bg-slate-950/80 border border-slate-800">
+                  <div className="p-2.5 rounded-lg bg-slate-950/90 border border-slate-800">
                     <strong className="text-amber-400">4. Публичная ссылка TestFlight</strong>
                     <p className="text-slate-400 mt-0.5">
                       При отправке приложения в TestFlight вы получаете публичную веб-ссылку. Пользователи переходят по ссылке со своего iPhone и устанавливают приложение в 1 клик.
                     </p>
                   </div>
                 </div>
-              </div>
+              </details>
 
-              <div className="p-4 rounded-xl bg-sky-500/10 border border-sky-500/20 text-sky-300">
-                <h4 className="font-bold text-sm mb-1 text-white flex items-center gap-2">
-                  <span>🍎</span> Сборка через Xcode (Для разработчиков)
-                </h4>
-                <p>
-                  Для компиляции собственного нативного приложения iOS из исходного кода используется <code>NEPacketTunnelProvider</code>.
-                </p>
-              </div>
+              {/* Блок 2: Сборка через Xcode (Под кат) */}
+              <details className="group rounded-xl bg-slate-950 border border-slate-800 overflow-hidden transition-all">
+                <summary className="flex items-center justify-between p-4 cursor-pointer font-bold text-sky-400 text-sm hover:bg-slate-900/80 transition-colors select-none list-none">
+                  <span className="flex items-center gap-2">
+                    <Apple className="w-4 h-4 text-sky-400" />
+                    <span>Сборка через Xcode для разработчиков (NetworkExtension)</span>
+                  </span>
+                  <span className="text-[11px] font-normal text-slate-400 bg-slate-900 border border-slate-800 px-2.5 py-1 rounded-lg flex items-center gap-1.5 group-open:hidden">
+                    <span>Раскрыть под катом</span>
+                    <ChevronDown className="w-3.5 h-3.5 text-sky-400" />
+                  </span>
+                  <span className="text-[11px] font-normal text-slate-400 bg-slate-900 border border-slate-800 px-2.5 py-1 rounded-lg hidden group-open:inline-flex items-center gap-1.5">
+                    <span>Скрыть</span>
+                    <ChevronDown className="w-3.5 h-3.5 rotate-180 text-sky-400" />
+                  </span>
+                </summary>
 
-              <div className="space-y-3">
-                <div className="p-3.5 rounded-xl bg-slate-950 border border-slate-800 flex gap-3">
-                  <span className="flex items-center justify-center w-6 h-6 rounded-full bg-sky-500 text-white font-bold text-xs shrink-0">1</span>
-                  <div>
-                    <h5 className="font-bold text-white mb-0.5">Добавьте NetworkExtension Target в Xcode</h5>
-                    <p className="text-slate-400">
-                      В Xcode создайте <code>App Extension &gt; Packet Tunnel Provider</code>. Вставьте код из вкладки <code>PacketTunnelProvider.swift</code>.
-                    </p>
+                <div className="p-4 pt-2 border-t border-slate-900 space-y-3">
+                  <div className="p-3 rounded-lg bg-slate-900/60 border border-slate-800/80 flex gap-3">
+                    <span className="flex items-center justify-center w-6 h-6 rounded-full bg-sky-500 text-white font-bold text-xs shrink-0">1</span>
+                    <div>
+                      <h5 className="font-bold text-white mb-0.5">Добавьте NetworkExtension Target в Xcode</h5>
+                      <p className="text-slate-400">
+                        В Xcode создайте <code>App Extension &gt; Packet Tunnel Provider</code>. Вставьте код из вкладки <code>PacketTunnelProvider.swift</code>.
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="p-3 rounded-lg bg-slate-900/60 border border-slate-800/80 flex gap-3">
+                    <span className="flex items-center justify-center w-6 h-6 rounded-full bg-sky-500 text-white font-bold text-xs shrink-0">2</span>
+                    <div>
+                      <h5 className="font-bold text-white mb-0.5">Включите Network Extensions Capability</h5>
+                      <p className="text-slate-400">
+                        В свойствах проекта Xcode на вкладке <strong>Signing & Capabilities</strong> включите галочку <strong>Network Extensions &gt; Packet Tunnel</strong>.
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="p-3 rounded-lg bg-slate-900/60 border border-slate-800/80 flex gap-3">
+                    <span className="flex items-center justify-center w-6 h-6 rounded-full bg-sky-500 text-white font-bold text-xs shrink-0">3</span>
+                    <div>
+                      <h5 className="font-bold text-white mb-0.5">Публикация в TestFlight или установка через Xcode</h5>
+                      <p className="text-slate-400">
+                        Подключите iPhone по кабелю и нажмите <code>Run</code> или отправьте сборку в App Store Connect / TestFlight. Приложение запросит разрешение "Добавить конфигурацию VPN" в iOS.
+                      </p>
+                    </div>
                   </div>
                 </div>
-
-                <div className="p-3.5 rounded-xl bg-slate-950 border border-slate-800 flex gap-3">
-                  <span className="flex items-center justify-center w-6 h-6 rounded-full bg-sky-500 text-white font-bold text-xs shrink-0">2</span>
-                  <div>
-                    <h5 className="font-bold text-white mb-0.5">Включите Network Extensions Capability</h5>
-                    <p className="text-slate-400">
-                      В свойствах проекта Xcode на вкладке <strong>Signing & Capabilities</strong> включите галочку <strong>Network Extensions &gt; Packet Tunnel</strong>.
-                    </p>
-                  </div>
-                </div>
-
-                <div className="p-3.5 rounded-xl bg-slate-950 border border-slate-800 flex gap-3">
-                  <span className="flex items-center justify-center w-6 h-6 rounded-full bg-sky-500 text-white font-bold text-xs shrink-0">3</span>
-                  <div>
-                    <h5 className="font-bold text-white mb-0.5">Публикация в TestFlight или установка через Xcode</h5>
-                    <p className="text-slate-400">
-                      Подключите iPhone по кабелю и нажмите <code>Run</code> или отправьте сборку в App Store Connect / TestFlight. Приложение запросит разрешение "Добавить конфигурацию VPN" в iOS.
-                    </p>
-                  </div>
-                </div>
-              </div>
+              </details>
             </div>
           )}
 
@@ -291,31 +358,48 @@ export const PlatformGuideModal: React.FC<PlatformGuideModalProps> = ({ onClose,
                   <span>⚡</span> Преимущества Нативного Приложения перед PWA
                 </h4>
                 <p>
-                  Нативное приложение полностью решает ограничения браузерного PWA:
+                  Нативное приложение полностью решает ограничения браузерного PWA.
                 </p>
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                <div className="p-3.5 rounded-xl bg-slate-950 border border-slate-800">
-                  <h5 className="font-bold text-sky-400 mb-1 flex items-center gap-1.5">
-                    <Shield className="w-4 h-4" />
-                    Системный TUN Интерфейс
-                  </h5>
-                  <p className="text-slate-400 text-xs">
-                    Нативный код напрямую создает сетевой адаптер (tun0/utun3) в ядре OS. Весь TCP/UDP/ICMP трафик смартфона автоматически шифруется.
-                  </p>
-                </div>
+              <details className="group rounded-xl bg-slate-950 border border-slate-800 overflow-hidden transition-all">
+                <summary className="flex items-center justify-between p-4 cursor-pointer font-bold text-indigo-400 text-sm hover:bg-slate-900/80 transition-colors select-none list-none">
+                  <span className="flex items-center gap-2">
+                    <Layers className="w-4 h-4 text-indigo-400" />
+                    <span>Детали архитектуры TUN и Раздельного Туннелирования</span>
+                  </span>
+                  <span className="text-[11px] font-normal text-slate-400 bg-slate-900 border border-slate-800 px-2.5 py-1 rounded-lg flex items-center gap-1.5 group-open:hidden">
+                    <span>Раскрыть под катом</span>
+                    <ChevronDown className="w-3.5 h-3.5 text-indigo-400" />
+                  </span>
+                  <span className="text-[11px] font-normal text-slate-400 bg-slate-900 border border-slate-800 px-2.5 py-1 rounded-lg hidden group-open:inline-flex items-center gap-1.5">
+                    <span>Скрыть</span>
+                    <ChevronDown className="w-3.5 h-3.5 rotate-180 text-indigo-400" />
+                  </span>
+                </summary>
 
-                <div className="p-3.5 rounded-xl bg-slate-950 border border-slate-800">
-                  <h5 className="font-bold text-indigo-400 mb-1 flex items-center gap-1.5">
-                    <Zap className="w-4 h-4" />
-                    Раздельное Туннелирование
-                  </h5>
-                  <p className="text-slate-400 text-xs">
-                    Вы можете направлять через WireGuard только определенные мобильные приложения (например, YouTube, Telegram), а банковские приложения пускать напрямую.
-                  </p>
+                <div className="p-4 pt-2 border-t border-slate-900 grid grid-cols-1 md:grid-cols-2 gap-3">
+                  <div className="p-3.5 rounded-xl bg-slate-900/60 border border-slate-800">
+                    <h5 className="font-bold text-sky-400 mb-1 flex items-center gap-1.5">
+                      <Shield className="w-4 h-4" />
+                      Системный TUN Интерфейс
+                    </h5>
+                    <p className="text-slate-400 text-xs">
+                      Нативный код напрямую создает сетевой адаптер (tun0/utun3) в ядре OS. Весь TCP/UDP/ICMP трафик смартфона автоматически шифруется.
+                    </p>
+                  </div>
+
+                  <div className="p-3.5 rounded-xl bg-slate-900/60 border border-slate-800">
+                    <h5 className="font-bold text-indigo-400 mb-1 flex items-center gap-1.5">
+                      <Zap className="w-4 h-4" />
+                      Раздельное Туннелирование
+                    </h5>
+                    <p className="text-slate-400 text-xs">
+                      Вы можете направлять через WireGuard только определенные мобильные приложения (например, YouTube, Telegram), а банковские приложения пускать напрямую.
+                    </p>
+                  </div>
                 </div>
-              </div>
+              </details>
             </div>
           )}
 
@@ -338,5 +422,6 @@ export const PlatformGuideModal: React.FC<PlatformGuideModalProps> = ({ onClose,
     </div>
   );
 };
+
 
 

@@ -280,16 +280,10 @@ export default function App() {
       <footer className={`w-full border-t py-4 px-4 text-center text-xs transition-colors ${
         isLight ? 'border-slate-200 bg-white/80 text-slate-500' : 'border-slate-900 bg-slate-950/80 text-slate-500'
       }`}>
-        <div className="max-w-4xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-2">
-          <span>
-            WireGuard Native Cross-Platform Studio • Android (Kotlin VpnService) & iOS (Swift NEVPNManager)
+        <div className="max-w-4xl mx-auto flex items-center justify-center">
+          <span className="font-medium">
+            © {new Date().getFullYear()} iGetVPN Pro • Разработка Laik Ltd
           </span>
-          <button
-            onClick={() => setShowNativeCodeModal(true)}
-            className="text-sky-500 hover:underline cursor-pointer font-medium"
-          >
-            Исходный код (Swift/Kotlin) & Codemagic CI/CD
-          </button>
         </div>
       </footer>
 

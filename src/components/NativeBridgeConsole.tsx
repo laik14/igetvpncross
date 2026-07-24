@@ -103,7 +103,7 @@ export const NativeBridgeConsole: React.FC<NativeBridgeConsoleProps> = ({
             }`}>
               <span>Панель Нативного Туннеля ОС</span>
               <span className="text-[10px] font-mono px-2 py-0.5 rounded bg-sky-500/10 text-sky-600 dark:text-sky-300 border border-sky-500/20">
-                {platform === 'ios' ? 'iOS NEVPNManager' : 'Android VpnService'}
+                Native System Tunnel
               </span>
             </h3>
             <p className={`text-xs ${isLight ? 'text-slate-500' : 'text-slate-400'}`}>

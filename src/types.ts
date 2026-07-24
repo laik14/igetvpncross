@@ -72,7 +72,7 @@ export interface AppSettings {
   autoConnectOnLaunch: boolean;
   persistentNotification: boolean;
   nativeSplitTunneling: boolean;
-  theme: 'liquid-dark' | 'liquid-light' | 'dark';
+  theme: 'liquid-dark' | 'liquid-light';
 }
 
 // Статус нативного туннеля ОС (Android VpnService / iOS NetworkExtension)
