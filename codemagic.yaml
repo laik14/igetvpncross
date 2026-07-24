@@ -31,7 +31,7 @@ workflows:
     publishing:
       email:
         recipients:
-          - "$CM_COMMIT_AUTHOR_EMAIL"
+          - ya@laik14.ru
 
   ios-testflight:
     name: iOS TestFlight Build (IPA)
