@@ -45,8 +45,11 @@ jobs:
           ANDROID_KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
           ANDROID_KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
         run: |
+          curl -L --fail --silent --show-error https://services.gradle.org/distributions/gradle-8.4-bin.zip -o /tmp/gradle.zip
+          unzip -q /tmp/gradle.zip -d /tmp
+          export PATH="/tmp/gradle-8.4/bin:$PATH"
           cd android
-          ./gradlew assembleRelease bundleRelease
+          gradle assembleRelease bundleRelease
 
       - name: Upload Android artifacts
         uses: actions/upload-artifact@v4
