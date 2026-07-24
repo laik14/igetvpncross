@@ -43,7 +43,7 @@ class WireGuardVpnService : VpnService() {
     private var vpnInterface: ParcelFileDescriptor? = null
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        val endpoint = intent?.getStringExtra("ENDPOINT") ?: "89.208.103.14:51820"
+        val endpoint = intent?.getStringExtra("ENDPOINT") ?: "91.186.220.107:51820"
         val clientIPv4 = intent?.getStringExtra("CLIENT_IP") ?: "10.8.0.2/32"
         val dnsServer = intent?.getStringExtra("DNS") ?: "1.1.1.1"
 
@@ -127,7 +127,7 @@ class PacketTunnelProvider: NEPacketTunnelProvider {
         let wgConfigString = providerConfiguration["wgConfig"] as? String ?? ""
         NSLog("[iOS Native] Запуск PacketTunnelProvider с WireGuard конфигом")
 
-        let networkSettings = NEPacketTunnelNetworkSettings(tunnelRemoteAddress: "89.208.103.14")
+        let networkSettings = NEPacketTunnelNetworkSettings(tunnelRemoteAddress: "91.186.220.107")
         let ipv4Settings = NEIPv4Settings(addresses: ["10.8.0.2"], subnetMasks: ["255.255.255.255"])
         ipv4Settings.includedRoutes = [NEIPv4Route.default()]
         networkSettings.ipv4Settings = ipv4Settings

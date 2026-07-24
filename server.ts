@@ -38,8 +38,8 @@ const SERVER_NODES = [
     serverPublicKey: "c2VydmVyX25pZF9ubF85MS4xODYuMjIwLjEwNw==",
     ip: "91.186.220.107",
     dns: "1.1.1.1, 8.8.8.8",
-    protocol: "WireGuard Standard (UDP)",
-    obfuscated: false,
+    protocol: "AmneziaWG v2 (Obfuscated UDP)",
+    obfuscated: true,
     pingMs: 28,
     loadPercent: 18,
     supportsIPv6: true,
@@ -57,7 +57,7 @@ const SERVER_NODES = [
     serverPublicKey: "c2VydmVyX2dlcl9kZV80NS4xMzQuMTUuMTk0",
     ip: "45.134.15.194",
     dns: "1.1.1.1, 1.0.0.1",
-    protocol: "AmneziaWG (Obfuscated UDP)",
+    protocol: "AmneziaWG v2 (Obfuscated UDP)",
     obfuscated: true,
     pingMs: 22,
     loadPercent: 24,
@@ -174,12 +174,12 @@ app.get('/api/ipcheck', (req, res) => {
 
   // Эмуляция прямого нешифрованного подключения
   res.json({
-    ip: "89.208.103.14",
+    ip: "Прямой IP (без VPN)",
     country: "Ваш Регион",
     city: "Провайдер Связи",
     countryCode: "LOC",
     flag: "🌐",
-    isp: "Local Public ISP",
+    isp: "Прямое интернет-подключение",
     protected: false,
     protocol: "Прямое нешифрованное соединение",
     latency: 12
@@ -215,8 +215,8 @@ AllowedIPs = ${node.allowedIPs}
 PersistentKeepalive = 25
 `;
 
-  if (enableObfuscation || node.obfuscated) {
-    confContent += `# Параметры обфускации AmneziaWG
+  if (enableObfuscation || node.obfuscated || true) {
+    confContent += `# Параметры обфускации WireGuard 2-го поколения (AmneziaWG v2 Obfuscation Header)
 Jc = 4
 Jmin = 40
 Jmax = 70
@@ -224,6 +224,8 @@ S1 = 15
 S2 = 28
 H1 = 120489102
 H2 = 918239012
+H3 = 182739182
+H4 = 827391283
 `;
   }
 
@@ -327,7 +329,7 @@ class WireGuardVpnService : VpnService() {
     private var vpnInterface: ParcelFileDescriptor? = null
 
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
-        val endpoint = intent?.getStringExtra("ENDPOINT") ?: "89.208.103.14:51820"
+        val endpoint = intent?.getStringExtra("ENDPOINT") ?: "91.186.220.107:51820"
         val clientIPv4 = intent?.getStringExtra("CLIENT_IP") ?: "10.8.0.2/32"
         val dnsServer = intent?.getStringExtra("DNS") ?: "1.1.1.1"
 
@@ -421,7 +423,7 @@ class PacketTunnelProvider: NEPacketTunnelProvider {
         NSLog("[iOS Native] Запуск PacketTunnelProvider с конфигом WireGuard: \\(wgQuickConfig.prefix(40))...")
 
         // Создаем параметры туннеля для iOS NetworkExtension
-        let networkSettings = NEPacketTunnelNetworkSettings(tunnelRemoteAddress: "89.208.103.14")
+        let networkSettings = NEPacketTunnelNetworkSettings(tunnelRemoteAddress: "91.186.220.107")
         let ipv4Settings = NEIPv4Settings(addresses: ["10.8.0.2"], subnetMasks: ["255.255.255.255"])
         ipv4Settings.includedRoutes = [NEIPv4Route.default()]
         networkSettings.ipv4Settings = ipv4Settings
