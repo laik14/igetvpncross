@@ -50,12 +50,19 @@ jobs:
           export PATH="/tmp/gradle-8.4/bin:$PATH"
           cd android
           gradle assembleDebug assembleRelease bundleRelease
+          mkdir -p ../artifacts
+          cp app/build/outputs/apk/debug/app-debug.apk ../artifacts/igetvpn-test-install.apk
 
-      - name: Upload Android artifacts
+      - name: Upload installable test APK
         uses: actions/upload-artifact@v4
         with:
-          name: android-release
+          name: igetvpn-test-apk
+          path: artifacts/igetvpn-test-install.apk
+
+      - name: Upload Android release artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: android-release-unsigned
           path: |
-            android/app/build/outputs/apk/debug/*.apk
             android/app/build/outputs/apk/release/*.apk
             android/app/build/outputs/bundle/release/*.aab
