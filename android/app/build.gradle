@@ -5,6 +5,7 @@ plugins {
 
 def keystorePath = System.getenv("ANDROID_KEYSTORE_PATH")
 def hasReleaseSigning = keystorePath != null &&
+        file(keystorePath).exists() &&
         System.getenv("ANDROID_KEYSTORE_PASSWORD") != null &&
         System.getenv("ANDROID_KEY_ALIAS") != null &&
         System.getenv("ANDROID_KEY_PASSWORD") != null
