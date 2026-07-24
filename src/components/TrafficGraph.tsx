@@ -10,6 +10,7 @@ interface TrafficGraphProps {
   totalDownloadedMb: number;
   totalUploadedMb: number;
   isConnected: boolean;
+  isLight?: boolean;
 }
 
 export const TrafficGraph: React.FC<TrafficGraphProps> = ({
@@ -18,39 +19,50 @@ export const TrafficGraph: React.FC<TrafficGraphProps> = ({
   currentUploadMbps,
   totalDownloadedMb,
   totalUploadedMb,
-  isConnected
+  isConnected,
+  isLight = false
 }) => {
   const [showChart, setShowChart] = useState(false);
 
   return (
-    <div className="bg-slate-900/90 border border-slate-800 rounded-2xl p-3 shadow-xl transition-all">
+    <div className={`border rounded-2xl p-3 shadow-sm transition-all ${
+      isLight
+        ? 'bg-white border-slate-200/80 text-slate-800'
+        : 'bg-[#11243a]/90 border-slate-800 text-slate-200 shadow-xl'
+    }`}>
       
       {/* Компактная шапка с показателями скорости */}
       <div className="flex items-center justify-between gap-2">
         <div className="flex items-center gap-2">
-          <Activity className="w-4 h-4 text-sky-400 shrink-0" />
-          <h3 className="text-xs font-bold uppercase tracking-wider text-slate-300">
+          <Activity className="w-4 h-4 text-sky-500 shrink-0" />
+          <h3 className={`text-xs font-bold uppercase tracking-wider ${
+            isLight ? 'text-slate-800' : 'text-slate-200'
+          }`}>
             Скорость и Трафик
           </h3>
         </div>
 
         {/* Индикаторы скорости в 1 строчку */}
         <div className="flex items-center gap-3 text-xs font-mono">
-          <div className="flex items-center gap-1 text-sky-400 font-bold">
+          <div className="flex items-center gap-1 text-sky-500 font-bold">
             <ArrowDown className="w-3.5 h-3.5" />
             <span>{isConnected ? currentDownloadMbps.toFixed(1) : '0.0'}</span>
-            <span className="text-[10px] font-normal text-slate-500">Мб/с</span>
+            <span className={`text-[10px] font-normal ${isLight ? 'text-slate-400' : 'text-slate-500'}`}>Мб/с</span>
           </div>
 
-          <div className="flex items-center gap-1 text-emerald-400 font-bold">
+          <div className="flex items-center gap-1 text-emerald-500 font-bold">
             <ArrowUp className="w-3.5 h-3.5" />
             <span>{isConnected ? currentUploadMbps.toFixed(1) : '0.0'}</span>
-            <span className="text-[10px] font-normal text-slate-500">Мб/с</span>
+            <span className={`text-[10px] font-normal ${isLight ? 'text-slate-400' : 'text-slate-500'}`}>Мб/с</span>
           </div>
 
           <button
             onClick={() => setShowChart(!showChart)}
-            className="ml-1 p-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-300 transition-colors flex items-center gap-1 text-[11px] font-sans cursor-pointer"
+            className={`ml-1 p-1 rounded-lg border transition-colors flex items-center gap-1 text-[11px] font-sans font-semibold cursor-pointer ${
+              isLight
+                ? 'bg-slate-100 hover:bg-slate-200 border-slate-300 text-slate-700'
+                : 'bg-slate-800 hover:bg-slate-700 border-slate-700 text-slate-300'
+            }`}
             title="График трафика"
           >
             <span className="hidden sm:inline">{showChart ? 'Скрыть' : 'График'}</span>
@@ -61,33 +73,33 @@ export const TrafficGraph: React.FC<TrafficGraphProps> = ({
 
       {/* Развернутые метрики и график (по клику) */}
       {showChart && (
-        <div className="mt-3 pt-3 border-t border-slate-800 space-y-3 animate-fadeIn">
+        <div className={`mt-3 pt-3 border-t space-y-3 animate-fadeIn ${isLight ? 'border-slate-200' : 'border-slate-800'}`}>
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 text-xs">
-            <div className="bg-slate-950/80 border border-slate-800 rounded-xl p-2.5">
-              <div className="text-[10px] text-slate-400 font-semibold mb-0.5">Входящая скорость</div>
-              <div className="text-sm font-bold font-mono text-sky-400">
-                {isConnected ? currentDownloadMbps.toFixed(1) : '0.0'} <span className="text-[10px] text-slate-500">Mbps</span>
+            <div className={`border rounded-xl p-2.5 ${isLight ? 'bg-slate-50 border-slate-200' : 'bg-[#0a182b] border-slate-800'}`}>
+              <div className={`text-[10px] font-bold mb-0.5 ${isLight ? 'text-slate-500' : 'text-slate-400'}`}>Входящая скорость</div>
+              <div className="text-sm font-bold font-mono text-sky-500">
+                {isConnected ? currentDownloadMbps.toFixed(1) : '0.0'} <span className="text-[10px] text-slate-400">Mbps</span>
               </div>
             </div>
 
-            <div className="bg-slate-950/80 border border-slate-800 rounded-xl p-2.5">
-              <div className="text-[10px] text-slate-400 font-semibold mb-0.5">Исходящая скорость</div>
-              <div className="text-sm font-bold font-mono text-emerald-400">
-                {isConnected ? currentUploadMbps.toFixed(1) : '0.0'} <span className="text-[10px] text-slate-500">Mbps</span>
+            <div className={`border rounded-xl p-2.5 ${isLight ? 'bg-slate-50 border-slate-200' : 'bg-[#0a182b] border-slate-800'}`}>
+              <div className={`text-[10px] font-bold mb-0.5 ${isLight ? 'text-slate-500' : 'text-slate-400'}`}>Исходящая скорость</div>
+              <div className="text-sm font-bold font-mono text-emerald-500">
+                {isConnected ? currentUploadMbps.toFixed(1) : '0.0'} <span className="text-[10px] text-slate-400">Mbps</span>
               </div>
             </div>
 
-            <div className="bg-slate-950/80 border border-slate-800 rounded-xl p-2.5">
-              <div className="text-[10px] text-slate-400 font-semibold mb-0.5">Получено всего (Rx)</div>
-              <div className="text-sm font-bold font-mono text-slate-200">
-                {totalDownloadedMb.toFixed(1)} <span className="text-[10px] text-slate-500">MB</span>
+            <div className={`border rounded-xl p-2.5 ${isLight ? 'bg-slate-50 border-slate-200' : 'bg-[#0a182b] border-slate-800'}`}>
+              <div className={`text-[10px] font-bold mb-0.5 ${isLight ? 'text-slate-500' : 'text-slate-400'}`}>Получено всего (Rx)</div>
+              <div className={`text-sm font-bold font-mono ${isLight ? 'text-slate-900' : 'text-slate-200'}`}>
+                {totalDownloadedMb.toFixed(1)} <span className="text-[10px] text-slate-400">MB</span>
               </div>
             </div>
 
-            <div className="bg-slate-950/80 border border-slate-800 rounded-xl p-2.5">
-              <div className="text-[10px] text-slate-400 font-semibold mb-0.5">Отправлено всего (Tx)</div>
-              <div className="text-sm font-bold font-mono text-slate-200">
-                {totalUploadedMb.toFixed(1)} <span className="text-[10px] text-slate-500">MB</span>
+            <div className={`border rounded-xl p-2.5 ${isLight ? 'bg-slate-50 border-slate-200' : 'bg-[#0a182b] border-slate-800'}`}>
+              <div className={`text-[10px] font-bold mb-0.5 ${isLight ? 'text-slate-500' : 'text-slate-400'}`}>Отправлено всего (Tx)</div>
+              <div className={`text-sm font-bold font-mono ${isLight ? 'text-slate-900' : 'text-slate-200'}`}>
+                {totalUploadedMb.toFixed(1)} <span className="text-[10px] text-slate-400">MB</span>
               </div>
             </div>
           </div>
@@ -97,22 +109,28 @@ export const TrafficGraph: React.FC<TrafficGraphProps> = ({
               <AreaChart data={data} margin={{ top: 5, right: 5, left: -25, bottom: 0 }}>
                 <defs>
                   <linearGradient id="downloadGrad" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor="#38bdf8" stopOpacity={0.4}/>
-                    <stop offset="95%" stopColor="#38bdf8" stopOpacity={0}/>
+                    <stop offset="5%" stopColor="#0284c7" stopOpacity={0.4}/>
+                    <stop offset="95%" stopColor="#0284c7" stopOpacity={0}/>
                   </linearGradient>
                   <linearGradient id="uploadGrad" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor="#34d399" stopOpacity={0.4}/>
-                    <stop offset="95%" stopColor="#34d399" stopOpacity={0}/>
+                    <stop offset="5%" stopColor="#10b981" stopOpacity={0.4}/>
+                    <stop offset="95%" stopColor="#10b981" stopOpacity={0}/>
                   </linearGradient>
                 </defs>
-                <XAxis dataKey="time" stroke="#475569" fontSize={10} tickLine={false} />
-                <YAxis stroke="#475569" fontSize={10} tickLine={false} />
+                <XAxis dataKey="time" stroke={isLight ? '#94a3b8' : '#475569'} fontSize={10} tickLine={false} />
+                <YAxis stroke={isLight ? '#94a3b8' : '#475569'} fontSize={10} tickLine={false} />
                 <Tooltip
-                  contentStyle={{ backgroundColor: '#0f172a', borderColor: '#334155', borderRadius: '8px', fontSize: '11px' }}
-                  labelStyle={{ color: '#94a3b8' }}
+                  contentStyle={{
+                    backgroundColor: isLight ? '#ffffff' : '#0f172a',
+                    borderColor: isLight ? '#cbd5e1' : '#334155',
+                    borderRadius: '12px',
+                    fontSize: '11px',
+                    boxShadow: '0 4px 12px rgba(0,0,0,0.1)'
+                  }}
+                  labelStyle={{ color: isLight ? '#334155' : '#94a3b8' }}
                 />
-                <Area type="monotone" dataKey="downloadMbps" name="Download (Mbps)" stroke="#38bdf8" fillOpacity={1} fill="url(#downloadGrad)" strokeWidth={2} />
-                <Area type="monotone" dataKey="uploadMbps" name="Upload (Mbps)" stroke="#34d399" fillOpacity={1} fill="url(#uploadGrad)" strokeWidth={2} />
+                <Area type="monotone" dataKey="downloadMbps" name="Download (Mbps)" stroke="#0284c7" fillOpacity={1} fill="url(#downloadGrad)" strokeWidth={2} />
+                <Area type="monotone" dataKey="uploadMbps" name="Upload (Mbps)" stroke="#10b981" fillOpacity={1} fill="url(#uploadGrad)" strokeWidth={2} />
               </AreaChart>
             </ResponsiveContainer>
           </div>
@@ -122,4 +140,3 @@ export const TrafficGraph: React.FC<TrafficGraphProps> = ({
     </div>
   );
 };
-

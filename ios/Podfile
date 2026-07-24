@@ -1,0 +1,10 @@
+platform :ios, '15.0'
+use_frameworks!
+
+target 'App' do
+  pod 'WireGuardKit', '~> 1.0'
+end
+
+target 'PacketTunnel' do
+  pod 'WireGuardKit', '~> 1.0'
+end

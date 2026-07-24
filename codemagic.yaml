@@ -1,0 +1,72 @@
+workflows:
+  android-release:
+    name: Android Release Build (APK & AAB)
+    max_build_duration: 60
+    instance_type: mac_mini_m1
+    environment:
+      groups:
+        - android_credentials
+      vars:
+        PACKAGE_NAME: "com.wireguard.nativemobile"
+      node: 18.x
+      java: 17
+    scripts:
+      - name: Install dependencies
+        script: |
+          npm ci || npm install
+      - name: Build Web Assets for Capacitor/Cordova/React
+        script: |
+          npm run build
+      - name: Build Android Release APK
+        script: |
+          cd android && ./gradlew assembleRelease
+    artifacts:
+      - android/app/build/outputs/apk/release/*.apk
+      - android/app/build/outputs/bundle/release/*.aab
+    publishing:
+      email:
+        recipients:
+          - user@example.com
+        notify_on_build_start: false
+        notify_on_build_failure: true
+
+  ios-testflight:
+    name: iOS TestFlight Build (IPA)
+    max_build_duration: 60
+    instance_type: mac_mini_m1
+    environment:
+      ios_signing:
+        distribution_type: app_store
+        bundle_identifier: com.wireguard.nativemobile
+      vars:
+        XCODE_WORKSPACE: "ios/App/App.xcworkspace"
+        XCODE_SCHEME: "App"
+        APP_STORE_CONNECT_ISSUER_ID: Encrypted
+        APP_STORE_CONNECT_KEY_IDENTIFIER: Encrypted
+        APP_STORE_CONNECT_PRIVATE_KEY: Encrypted
+      xcode: latest
+      cocoapods: default
+    scripts:
+      - name: Install Node dependencies & Build Web
+        script: |
+          npm ci || npm install
+          npm run build
+      - name: Install CocoaPods
+        script: |
+          cd ios/App && pod install
+      - name: Set build number
+        script: |
+          cd ios/App && agvtool new-version -all $(($BUILD_NUMBER + 1))
+      - name: Build IPA for App Store / TestFlight
+        script: |
+          xcode-project build-ipa \
+            --workspace "$XCODE_WORKSPACE" \
+            --scheme "$XCODE_SCHEME"
+    artifacts:
+      - build/ios/ipa/*.ipa
+    publishing:
+      app_store_connect:
+        auth: integration
+        submit_to_testflight: true
+        beta_groups:
+          - Internal Testers

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Power, Globe, Shield, RefreshCw, Lock, Sparkles, AlertCircle, ArrowUpRight } from 'lucide-react';
+import { Power, RefreshCw, Lock, ArrowUpRight } from 'lucide-react';
 import { ConnectionState, WGNode } from '../types';
 
 interface MainConnectButtonProps {
@@ -9,6 +9,7 @@ interface MainConnectButtonProps {
   onSelectNodeClick: () => void;
   onExportConfigClick: () => void;
   killSwitch: boolean;
+  isLight?: boolean;
 }
 
 export const MainConnectButton: React.FC<MainConnectButtonProps> = ({
@@ -17,7 +18,8 @@ export const MainConnectButton: React.FC<MainConnectButtonProps> = ({
   onToggleConnect,
   onSelectNodeClick,
   onExportConfigClick,
-  killSwitch
+  killSwitch,
+  isLight = false
 }) => {
   const [uptimeSeconds, setUptimeSeconds] = useState(0);
 
@@ -46,38 +48,43 @@ export const MainConnectButton: React.FC<MainConnectButtonProps> = ({
   return (
     <div className="flex flex-col items-center justify-center py-2 px-3">
       
-      {/* Node Location Badge & Switcher */}
+      {/* Селектор ноды на главном экране (как на скриншоте) */}
       <div 
         onClick={onSelectNodeClick}
-        className="group relative flex items-center gap-2.5 px-3 py-1.5 rounded-full bg-slate-900/90 border border-slate-800 hover:border-slate-700 hover:bg-slate-800/80 transition-all cursor-pointer shadow-md mb-3"
+        className={`group relative flex items-center gap-2.5 px-3.5 py-2 rounded-2xl border transition-all cursor-pointer shadow-md mb-3 ${
+          isLight
+            ? 'bg-white hover:bg-slate-50 border-slate-200 text-slate-800'
+            : 'bg-[#11243a] hover:bg-slate-800 border-slate-700/80 text-white'
+        }`}
       >
         <span className="text-xl leading-none">{selectedNode.flag}</span>
         <div className="flex flex-col text-left">
           <div className="flex items-center gap-1.5">
-            <span className="text-xs font-bold text-white group-hover:text-sky-300 transition-colors">
-              {selectedNode.city}, {selectedNode.country}
+            <span className={`text-xs font-bold transition-colors ${
+              isLight ? 'text-slate-900 group-hover:text-sky-600' : 'text-white group-hover:text-sky-300'
+            }`}>
+              {selectedNode.name}
             </span>
-            <span className="text-[9px] uppercase font-bold tracking-wider px-1.5 py-0.2 rounded bg-blue-500/20 text-blue-400">
+            <span className="text-[9px] uppercase font-black tracking-wider px-1.5 py-0.2 rounded bg-sky-500/20 text-sky-500">
               {selectedNode.countryCode}
             </span>
           </div>
-          <div className="flex items-center gap-2 text-[10px] text-slate-400">
-            <span className="flex items-center gap-1 text-emerald-400 font-medium">
-              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse"></span>
+          <div className="flex items-center gap-2 text-[10px] text-slate-400 font-mono">
+            <span className="flex items-center gap-1 text-emerald-500 font-bold">
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
               {selectedNode.pingMs} ms
             </span>
             <span>•</span>
-            <span>{selectedNode.protocol}</span>
+            <span>{selectedNode.ip}</span>
           </div>
         </div>
-        <div className="ml-1 pl-2 border-l border-slate-800 text-[11px] font-medium text-sky-400 group-hover:translate-x-0.5 transition-transform">
+        <div className="ml-1 pl-2 border-l border-slate-200 dark:border-slate-700 text-[11px] font-bold text-sky-500 group-hover:translate-x-0.5 transition-transform">
           Сменить
         </div>
       </div>
 
-      {/* Main Connection Toggle Button */}
+      {/* Кнопка включения ВПН */}
       <div className="relative flex items-center justify-center my-1">
-        {/* Glowing Background Pulse Rings */}
         {isConnected && (
           <>
             <div className="absolute w-44 h-44 rounded-full bg-emerald-500/10 animate-ping opacity-30"></div>
@@ -95,48 +102,54 @@ export const MainConnectButton: React.FC<MainConnectButtonProps> = ({
               ? 'bg-gradient-to-b from-emerald-500 via-teal-600 to-emerald-700 text-white shadow-emerald-500/30 ring-4 ring-emerald-500/20'
               : isConnecting
               ? 'bg-gradient-to-b from-amber-500 via-amber-600 to-amber-700 text-white shadow-amber-500/20 ring-4 ring-amber-500/20'
-              : 'bg-gradient-to-b from-slate-800 via-slate-900 to-slate-950 text-slate-300 border border-slate-700/80 shadow-black/80 hover:border-sky-500/50 hover:text-white'
+              : isLight
+              ? 'bg-gradient-to-b from-white via-slate-100 to-slate-200 text-slate-800 border border-slate-300 shadow-md hover:border-sky-500'
+              : 'bg-gradient-to-b from-[#152a45] via-[#0f2036] to-[#0a1626] text-slate-200 border border-slate-700/80 shadow-black/80 hover:border-sky-500/50 hover:text-white'
           }`}
         >
           {isConnecting ? (
             <RefreshCw className="w-9 h-9 animate-spin text-white mb-1.5" />
           ) : (
-            <Power className={`w-9 h-9 mb-1.5 transition-transform duration-300 ${isConnected ? 'scale-110 text-white' : 'text-slate-400 group-hover:text-white'}`} />
+            <Power className={`w-9 h-9 mb-1.5 transition-transform duration-300 ${isConnected ? 'scale-110 text-white' : isLight ? 'text-slate-600' : 'text-slate-400'}`} />
           )}
 
           <span className="text-[11px] font-bold uppercase tracking-wider text-center leading-tight">
             {isConnected ? 'Отключить' : isConnecting ? 'Подключение...' : 'Подключить'}
           </span>
 
-          <span className="text-[10px] opacity-80 mt-0.5 font-mono">
+          <span className="text-[10px] opacity-80 mt-0.5 font-mono font-bold">
             {isConnected ? formatUptime(uptimeSeconds) : 'WireGuard UDP'}
           </span>
         </button>
       </div>
 
-      {/* Статус подключения и дополнительные действия */}
+      {/* Статус подключения */}
       <div className="mt-3 flex flex-col items-center gap-1.5 text-center">
         <div className="flex items-center gap-2">
           <span className={`w-2 h-2 rounded-full ${
-            isConnected ? 'bg-emerald-400 animate-pulse' : isConnecting ? 'bg-amber-400 animate-bounce' : 'bg-slate-600'
+            isConnected ? 'bg-emerald-500 animate-pulse' : isConnecting ? 'bg-amber-500 animate-bounce' : 'bg-slate-400'
           }`}></span>
-          <span className="text-xs font-semibold text-white">
+          <span className={`text-xs font-bold ${isLight ? 'text-slate-800' : 'text-white'}`}>
             {isConnected
-              ? `Защищено через WireGuard (${selectedNode.city})`
+              ? `Защищено через ${selectedNode.name}`
               : isConnecting
-              ? 'Установка защищенного туннеля...'
+              ? 'Установка туннеля...'
               : 'Соединение неактивно'}
           </span>
         </div>
 
-        {/* Быстрая ссылка на генерацию конфигурации WireGuard */}
+        {/* Быстрая генерация .conf */}
         <button
           onClick={onExportConfigClick}
-          className="flex items-center gap-1 px-2.5 py-1 rounded-lg bg-slate-900/90 hover:bg-slate-800 border border-slate-800 text-slate-300 hover:text-white text-[11px] font-medium transition-all cursor-pointer mt-1"
+          className={`flex items-center gap-1 px-2.5 py-1 rounded-xl border text-[11px] font-semibold transition-all cursor-pointer mt-1 ${
+            isLight
+              ? 'bg-white hover:bg-slate-100 border-slate-300 text-slate-700 shadow-sm'
+              : 'bg-[#11243a] hover:bg-slate-800 border-slate-700 text-slate-300 hover:text-white'
+          }`}
         >
-          <Lock className="w-3 h-3 text-sky-400" />
+          <Lock className="w-3 h-3 text-sky-500" />
           <span>Создать .conf / QR-код</span>
-          <ArrowUpRight className="w-3 h-3 text-slate-500" />
+          <ArrowUpRight className="w-3 h-3 text-slate-400" />
         </button>
       </div>
 

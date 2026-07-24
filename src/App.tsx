@@ -62,7 +62,8 @@ export default function App() {
     clientName: 'WireGuard Native Смартфон',
     autoConnectOnLaunch: true,
     persistentNotification: true,
-    nativeSplitTunneling: true
+    nativeSplitTunneling: true,
+    theme: 'liquid-dark'
   });
 
   // Первоначальная загрузка
@@ -207,16 +208,20 @@ export default function App() {
     return () => clearInterval(interval);
   }, [connectionState]);
 
+  const isLight = settings.theme === 'liquid-light';
+
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col font-sans selection:bg-sky-500 selection:text-white overflow-x-hidden w-full">
+    <div className={`min-h-screen flex flex-col font-sans selection:bg-sky-500 selection:text-white overflow-x-hidden w-full transition-colors duration-300 ${
+      isLight ? 'bg-slate-100 text-slate-800' : 'bg-slate-950 text-slate-100'
+    }`}>
       
       {/* Header Bar */}
       <Header
         platform={platform}
-        onOpenGuides={() => setShowPlatformGuides(true)}
         onOpenSettings={() => setShowSettings(true)}
-        onOpenNativeCode={() => setShowNativeCodeModal(true)}
         isNativeConnected={connectionState === 'connected'}
+        theme={settings.theme}
+        onToggleTheme={() => setSettings(s => ({ ...s, theme: s.theme === 'liquid-light' ? 'liquid-dark' : 'liquid-light' }))}
       />
 
       {/* Main Content Body */}
@@ -231,6 +236,7 @@ export default function App() {
             onSelectNodeClick={() => setShowNodeSelector(true)}
             onExportConfigClick={() => setShowConfigExport(true)}
             killSwitch={settings.killSwitch}
+            isLight={isLight}
           />
         )}
 
@@ -241,16 +247,18 @@ export default function App() {
           isConnected={connectionState === 'connected'}
           onToggleConnection={handleToggleConnection}
           onOpenSplitTunneling={() => setShowSplitTunnelingModal(true)}
+          isLight={isLight}
         />
 
-        {/* IP & Security Status Widget */}
+        {/* IP & Security Status Widget (Collapsible) */}
         <IPCheckerWidget
           ipInfo={ipInfo}
           loading={loadingIp}
           onRefresh={() => fetchIpCheck(connectionState === 'connected', selectedNode || undefined)}
+          isLight={isLight}
         />
 
-        {/* Traffic Chart */}
+        {/* Traffic Chart (Collapsible) */}
         <TrafficGraph
           data={trafficHistory}
           currentDownloadMbps={currentDown}
@@ -258,26 +266,29 @@ export default function App() {
           totalDownloadedMb={totalDownMb}
           totalUploadedMb={totalUpMb}
           isConnected={connectionState === 'connected'}
+          isLight={isLight}
         />
 
         {/* In-App Native Proxy Tester */}
         {selectedNode && (
-          <ProxyTesterTab selectedNode={selectedNode} />
+          <ProxyTesterTab selectedNode={selectedNode} isLight={isLight} />
         )}
 
       </main>
 
       {/* Footer */}
-      <footer className="w-full border-t border-slate-900 bg-slate-950/80 py-4 px-4 text-center text-xs text-slate-500">
+      <footer className={`w-full border-t py-4 px-4 text-center text-xs transition-colors ${
+        isLight ? 'border-slate-200 bg-white/80 text-slate-500' : 'border-slate-900 bg-slate-950/80 text-slate-500'
+      }`}>
         <div className="max-w-4xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-2">
           <span>
             WireGuard Native Cross-Platform Studio • Android (Kotlin VpnService) & iOS (Swift NEVPNManager)
           </span>
           <button
             onClick={() => setShowNativeCodeModal(true)}
-            className="text-sky-400 hover:underline cursor-pointer font-medium"
+            className="text-sky-500 hover:underline cursor-pointer font-medium"
           >
-            Исходный код приложения для Android Studio & Xcode
+            Исходный код (Swift/Kotlin) & Codemagic CI/CD
           </button>
         </div>
       </footer>
@@ -296,6 +307,7 @@ export default function App() {
           onClose={() => setShowNodeSelector(false)}
           onRefreshPings={handleRefreshPings}
           pinging={pinging}
+          isLight={isLight}
         />
       )}
 
@@ -319,6 +331,8 @@ export default function App() {
           settings={settings}
           onUpdateSettings={setSettings}
           onClose={() => setShowSettings(false)}
+          onOpenNativeCode={() => setShowNativeCodeModal(true)}
+          onOpenGuides={() => setShowPlatformGuides(true)}
         />
       )}
 
