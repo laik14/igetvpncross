@@ -49,12 +49,13 @@ jobs:
           unzip -q /tmp/gradle.zip -d /tmp
           export PATH="/tmp/gradle-8.4/bin:$PATH"
           cd android
-          gradle assembleRelease bundleRelease
+          gradle assembleDebug assembleRelease bundleRelease
 
       - name: Upload Android artifacts
         uses: actions/upload-artifact@v4
         with:
           name: android-release
           path: |
+            android/app/build/outputs/apk/debug/*.apk
             android/app/build/outputs/apk/release/*.apk
             android/app/build/outputs/bundle/release/*.aab
