@@ -32,8 +32,6 @@ workflows:
       email:
         recipients:
           - "$CM_COMMIT_AUTHOR_EMAIL"
-        notify_on_build_start: false
-        notify_on_build_failure: true
 
   ios-testflight:
     name: iOS TestFlight Build (IPA)
